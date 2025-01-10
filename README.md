@@ -1,2 +1,58 @@
 # POV-Display-Arduino-RPi-PicoW
 A Persistence of Vision (POV) display using Arduino code, Raspberry Pi Pico W, and Neopixel LEDs.
+
+# POV Display (Persistence of Vision)
+
+This project demonstrates a Persistence of Vision (POV) display designed using Arduino code and C++ libraries. The hardware setup includes a Raspberry Pi Pico W and Neopixel LEDs. The POV display creates the illusion of a continuous image by rapidly flashing LEDs in a specific sequence. This repository contains all the necessary code, schematics, and documentation to recreate the project.
+
+## Features
+- Arduino code for controlling the POV display
+- Integration with Raspberry Pi Pico W
+- Neopixel LED control
+- Detailed setup instructions and schematics
+
+## Getting Started
+
+### Prerequisites
+- Arduino IDE
+- Raspberry Pi Pico W
+- Neopixel LEDs
+- Adafruit Neopixel library
+- Raspberry Pi Pico SDK
+
+### Installation
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/gauravshetty90/POV-Display-Arduino-RPi-PicoW.git
+   cd POV-Display-Arduino-RPi-PicoW
+2. Install Arduino IDE and the board library:
+    - Open Arduino IDE and go to File > Preferences.
+    - In the Additional Board Manager URLs field, provide the link: https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
+    - Go to Tools > Board > Boards Manager.
+    - Scroll down until you find Raspberry Pi Pico/RP2040 and click on Install.
+    - Wait for the installation to complete.
+    - Change the board type by going to Tools > Board > Boards Manager and selecting Raspberry Pi Pico W.
+
+3. Set up the required libraries and webserver SSID and password:
+    - Open Arduino IDE and go to Tools > Manage Libraries.
+    - Search for and install the following libraries:
+      - Adafruit_NeoPixel
+      - AsyncWebServer_RP2040W
+    - Add the Access Point SSID and Password of your choice in the placeholders present in credentials.h.
+    - Click on Sketch > Include Library to include the libraries (if you need to add extra libraries).
+4. Compile the code:
+    - Select the correct board and port.
+    - Upload the code to the Raspberry Pi Pico W.
+5. Connect to the webserver:
+    - The Raspberry Pi Pico W should create an Access Point network.
+    - Set the serial monitor port to 115200 to see the connection status and details once the code is uploaded.
+    - Use the SSID and password to connect to the webserver through the URL: http://192.168.4.1.
+  
+# Contributing
+Contributions are welcome! Please fork this repository and submit pull requests.
+
+# License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+# Acknowledgments
+Thanks to the open-source community for the libraries and tools used in this project.
