@@ -3,7 +3,7 @@ A Persistence of Vision (POV) display using Arduino code, Raspberry Pi Pico W, a
 
 # POV Display (Persistence of Vision)
 
-This project demonstrates a Persistence of Vision (POV) display using Arduino and C++ with a Raspberry Pi Pico W and Neopixel LEDs, which rapidly flash in a sequence to create the illusion of continuous images. It also hosts a webserver on the Raspberry Pi in Access Point mode, enabling users to input custom text that the POV setup will display. The repository contains all the necessary code and documentation to recreate the project.
+This project demonstrates a Persistence of Vision (POV) display using Arduino and C++ with a Raspberry Pi Pico W and Neopixel LEDs, rapidly flashing in sequence to create the illusion of continuous images. The system also hosts a webserver on the Raspberry Pi in Access Point mode, serving an HTML webpage when the IP is accessed, where users can input custom text to be displayed. The repository contains all the necessary code and documentation to recreate the project.
 
 ## Features
 - Arduino code for controlling the POV display
