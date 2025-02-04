@@ -56,3 +56,12 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 # Acknowledgments
 Thanks to the open-source community for the libraries and tools used in this project.
+
+#Working Images
+
+
+![The default landing page](https://github.com/user-attachments/assets/22165740-62c9-4a14-a32b-65dc928cfb88)
+
+![Text and color selection](https://github.com/user-attachments/assets/046c34c9-8f90-4566-833f-df70439f77c0)
+
+
