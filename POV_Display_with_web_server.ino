@@ -8,21 +8,21 @@
   Licensed under GPLv3 license
  *****************************************************************************************************************************/
 
-#if !( defined(ARDUINO_RASPBERRY_PI_PICO_W) )
+#if !(defined(ARDUINO_RASPBERRY_PI_PICO_W))
 #error For RASPBERRY_PI_PICO_W only
 #endif
 
 #if defined __has_include
-#if __has_include ("credentials.h")
+#if __has_include("credentials.h")
 #include "credentials.h"
-#else   
-// if you dont have a credentials.h file you may adjust the "secret Infos" inplace. 
+#else
+// if you dont have a credentials.h file you may adjust the "secret Infos" inplace.
 #define WIFI_SSID "secret Info"
 #define WIFI_PASS "secret Info"
 #endif
 #endif
 
-#define _RP2040W_AWS_LOGLEVEL_     1
+#define _RP2040W_AWS_LOGLEVEL_ 1
 
 #include <Adafruit_NeoPixel.h>
 #include <string.h>
@@ -30,30 +30,30 @@
 #include <AsyncFSEditor_RP2040W.h>
 #include "pico/stdlib.h"
 
-#define PIN_NEO_PIXEL  18  /* Arduino pin that connects to NeoPixel */
-#define NUM_PIXELS  8   /* The number of LEDs (pixels) on NeoPixel */
-#define Hallsensor  16  /* Arduino pin to which the hallsensor is connected */
-#define MAX_CONNECTIONS  2 /* Maximum number for connections allowed in the AP hotspot */
-#define STATUS_CHECK_INTERVAL  10000L /* This constant is used in check_status method which is used for heartbeat print in serial monitor */
+#define PIN_NEO_PIXEL 18             /* Raspberry Pi Pico W pin that connects to NeoPixel */
+#define NUM_PIXELS 8                 /* The number of LEDs (pixels) on NeoPixel */
+#define Hallsensor 16                /* Raspberry Pi Pico W pin to which the hallsensor is connected */
+#define MAX_CONNECTIONS 2            /* Maximum number for connections allowed in the AP hotspot */
+#define STATUS_CHECK_INTERVAL 10000L /* This constant is used in check_status method which is used for heartbeat print in serial monitor */
 
-const char* ap_ssid = WIFI_SSID; /* Access Point SSID */
-const char* ap_password = WIFI_PASS; /* Access Point Password */
+const char *ap_ssid = WIFI_SSID;           /* Access Point SSID */
+const char *ap_password = WIFI_PASS;       /* Access Point Password */
 uint8_t max_connections = MAX_CONNECTIONS; /* Maximum Connection Limit for AP */
-unsigned long delayStart; /* Used to save the timer data used in loop() method */
-bool delayRunning = false; /* Flag to be used in loop() method */
+unsigned long delayStart;                  /* Used to save the timer data used in loop() method */
+bool delayRunning = false;                 /* Flag to be used in loop() method */
 
 /* Configure IP Address */
-IPAddress local_ip(192, 168, 4, 1);  /* Stores the desired static IP address that needs to set to connect to the webserver */
-IPAddress gateway(192, 168, 4, 1); /* Stores the gateway IP that needs to be set to the webserver */
+IPAddress local_ip(192, 168, 4, 1); /* Stores the desired static IP address that needs to set to connect to the webserver */
+IPAddress gateway(192, 168, 4, 1);  /* Stores the gateway IP that needs to be set to the webserver */
 IPAddress subnet(255, 255, 255, 0); /* Stores the subnet mask that needs to be set to the webserver */
 
-AsyncWebServer  server(80); /* Create an aynchronous web server at port 80 */
+AsyncWebServer server(80); /* Create an aynchronous web server at port 80 */
 
 /* Initialising the Neopixel library by providing details about the number of pixels, output pin for the Neopixels and type of LEDs used */
 Adafruit_NeoPixel NeoPixel(NUM_PIXELS, PIN_NEO_PIXEL, NEO_GRB + NEO_KHZ800);
 
 /* Stores the color values in rgb */
-uint32_t e = NeoPixel.Color(0, 0, 0); /* no colour */
+uint32_t e = NeoPixel.Color(0, 0, 0);                 /* no colour */
 uint32_t colorToDisp = NeoPixel.Color(255, 255, 255); /* White color is set by default */
 
 char receivedWords[14] = "POV Display";
@@ -61,7 +61,7 @@ char text_color[18];
 
 /* String that contains the html code of the form that is being displayed on the webserver */
 const String postForms =
-"<html>\
+    "<html>\
 <head>\
 <title>AsyncWebServer POST handling</title>\
 <style>\
@@ -132,7 +132,8 @@ void setup()
   Serial.begin(115200);
 
   /* It waits for 5000ms if the serial monitor output has not been started */
-  while (!Serial && millis() < 5000);
+  while (!Serial && millis() < 5000)
+    ;
 
   /* Set a delay of 200 milliseconds before moving ahead with the execution */
   delay(200);
@@ -143,7 +144,8 @@ void setup()
     Serial.println("Communication with WiFi module failed!");
 
     /* Wait until the WiFi module is available */
-    while (true);
+    while (true)
+      ;
   }
 
   /* Provide the configurations to start the Server in Access Point mode with the provided IP, Gateway and Subnet */
@@ -170,16 +172,16 @@ void setup()
   }
 
   /* It sets up a route for HTTP GET requests to the root URL ("/") */
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request){
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
     /* The lambda function "{...}" calls handleRoot(request) when a GET request is received at the root URL */
-    handleRoot(request);
-  });
+    handleRoot(request); });
 
   /* Sets up a route for HTTP POST requests to the URL "/postform/" (URI, web request method and request handler function is sent as parameters) */
-  server.on("/postform/", HTTP_POST, [](AsyncWebServerRequest * request){
+  server.on("/postform/", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
     /* The lambda function calls handlePostForm(request) when a POST request is received at this URL */
-    handleForm(request);
-  });
+    handleForm(request); });
 
   server.onNotFound(handleNotFound);
 
@@ -195,7 +197,6 @@ void setup()
   NeoPixel.show();
   /* Configures the specified pin to behave either as an input or an output. Here we configure the hall sensor which is connected to PIN 16 to work as an input */
   pinMode(Hallsensor, INPUT_PULLUP);
-
 }
 
 /* Send the post request to the webserver with the html form which is embedded inside the string 'postForms' */
@@ -214,44 +215,67 @@ void handleForm(AsyncWebServerRequest *request)
     request->send(405, "text/plain", "Method Not Allowed");
   }
   else
-  { 
+  {
     /* Message to be displayed after the form is submitted */
     String message = "The message that will be displayed in the POV Display is: ";
 
     for (uint8_t i = 0; i < request->args(); i++)
     {
       /* Parse the obtained argument from the submitted form and check the argument name "letters" which contains the text to be displayed on the POV display */
-      if (strcmp(request->argName(i).c_str(), "letters") == 0) {
+      if (strcmp(request->argName(i).c_str(), "letters") == 0)
+      {
         /* Store the text which is obtained from the Text Box in the post form into the variable 'receivedWords' and also add it to the string 'message' which will be dispayed in the new page */
         message += " " + request->arg(i) + "\n";
         strcpy(receivedWords, request->arg(i).c_str());
       }
       /* Parse the obtained argument from the submitted form and check the argument name "color" which contains the color of the text to be displayed */
-      else if (strcmp(request->argName(i).c_str(), "color") == 0) {
+      else if (strcmp(request->argName(i).c_str(), "color") == 0)
+      {
         /* Store the color value obtained in variable 'text_color' and then update the color value based on the input obtained from the form to a variable of type uint32_t named 'colorToDisp' */
         message += "The Color of the message is: " + request->arg(i) + "\n";
         strcpy(text_color, request->arg(i).c_str());
-        if (strcmp(text_color, "white") == 0) {
+        if (strcmp(text_color, "white") == 0)
+        {
           colorToDisp = NeoPixel.Color(255, 255, 255);
-        } else if (strcmp(text_color, "red") == 0) {
+        }
+        else if (strcmp(text_color, "red") == 0)
+        {
           colorToDisp = NeoPixel.Color(255, 0, 0);
-        } else if (strcmp(text_color, "green") == 0) {
+        }
+        else if (strcmp(text_color, "green") == 0)
+        {
           colorToDisp = NeoPixel.Color(0, 255, 0);
-        } else if (strcmp(text_color, "blue") == 0) {
+        }
+        else if (strcmp(text_color, "blue") == 0)
+        {
           colorToDisp = NeoPixel.Color(0, 0, 255);
-        } else if (strcmp(text_color, "purple") == 0) {
+        }
+        else if (strcmp(text_color, "purple") == 0)
+        {
           colorToDisp = NeoPixel.Color(255, 0, 255);
-        } else if (strcmp(text_color, "yellow") == 0) {
+        }
+        else if (strcmp(text_color, "yellow") == 0)
+        {
           colorToDisp = NeoPixel.Color(255, 255, 0);
-        } else if (strcmp(text_color, "cyan") == 0) {
+        }
+        else if (strcmp(text_color, "cyan") == 0)
+        {
           colorToDisp = NeoPixel.Color(0, 255, 255);
-        } else if (strcmp(text_color, "blue_violet") == 0) {
+        }
+        else if (strcmp(text_color, "blue_violet") == 0)
+        {
           colorToDisp = NeoPixel.Color(138, 43, 226);
-        } else if (strcmp(text_color, "sky_blue") == 0) {
+        }
+        else if (strcmp(text_color, "sky_blue") == 0)
+        {
           colorToDisp = NeoPixel.Color(0, 191, 255);
-        } else if (strcmp(text_color, "aquamarine") == 0) {
+        }
+        else if (strcmp(text_color, "aquamarine") == 0)
+        {
           colorToDisp = NeoPixel.Color(127, 255, 212);
-        } else if (strcmp(text_color, "navy") == 0) {
+        }
+        else if (strcmp(text_color, "navy") == 0)
+        {
           colorToDisp = NeoPixel.Color(0, 0, 128);
         }
       }
@@ -308,7 +332,7 @@ void loop()
   }
   /* This condition detects if the hallsensor detects a change in voltage due to a magnetic field and the minimum time delay is more than 19 milliseconds since the last detection. This check is provided to verify if one rotation is completed by the POV display */
   /* It also checks if delayRunning flag is set as true */
-  else if (digitalRead(Hallsensor) == LOW  && delayRunning == true && ((millis() - delayStart) >= 19))
+  else if (digitalRead(Hallsensor) == LOW && delayRunning == true && ((millis() - delayStart) >= 19))
   {
     /* Update the delayRunning flag to false so that the if condition can be evaluated to true */
     delayRunning = false;
@@ -326,7 +350,6 @@ void check_status()
     /* The value of checkstatus_timeout is icremented by 10 seconds so that heartBeatPrint() is called every 10 seconds */
     checkstatus_timeout = millis() + STATUS_CHECK_INTERVAL;
   }
-
 }
 
 /* Function to display the heartbeat print or status indicator in Serial Monitor in Arduino IDE in the form of dots(.......... ..........) */
@@ -352,165 +375,166 @@ void heartBeatPrint()
 void writeChars(uint32_t wordColor, char receivedWords[])
 {
   /* Run the for loop based on the length of char array receivedWords */
-  for (int i = strlen(receivedWords) - 1; i >= 0; i--) {
-    switch (receivedWords[i]) {
-      /* Each character is compared with the a character in switch case and the function to display that character in the POV display is called  */
-      case 'A':
-      case 'a':
-        drawA(wordColor);
-        break;
-      case 'B':
-      case 'b':
-        drawB(wordColor);
-        break;
-      case 'C':
-      case 'c':
-        drawC(wordColor);
-        break;
-      case 'D':
-      case 'd':
-        drawD(wordColor);
-        break;
-      case 'E':
-      case 'e':
-        drawE(wordColor);
-        break;
-      case 'F':
-      case 'f':
-        drawF(wordColor);
-        break;
-      case 'G':
-      case 'g':
-        drawG(wordColor);
-        break;
-      case 'H':
-      case 'h':
-        drawH(wordColor);
-        break;
-      case 'I':
-      case 'i':
-        drawI(wordColor);
-        break;
-      case 'J':
-      case 'j':
-        drawJ(wordColor);
-        break;
-      case 'K':
-      case 'k':
-        drawK(wordColor);
-        break;
-      case 'L':
-      case 'l':
-        drawL(wordColor);
-        break;
-      case 'M':
-      case 'm':
-        drawM(wordColor);
-        break;
-      case 'N':
-      case 'n':
-        drawN(wordColor);
-        break;
-      case 'O':
-      case 'o':
-        drawO(wordColor);
-        break;
-      case 'P':
-      case 'p':
-        drawP(wordColor);
-        break;
-      case 'Q':
-      case 'q':
-        drawQ(wordColor);
-        break;
-      case 'R':
-      case 'r':
-        drawR(wordColor);
-        break;
-      case 'S':
-      case 's':
-        drawS(wordColor);
-        break;
-      case 'T':
-      case 't':
-        drawT(wordColor);
-        break;
-      case 'U':
-      case 'u':
-        drawU(wordColor);
-        break;
-      case 'V':
-      case 'v':
-        drawV(wordColor);
-        break;
-      case 'W':
-      case 'w':
-        drawW(wordColor);
-        break;
-      case 'X':
-      case 'x':
-        drawX(wordColor);
-        break;
-      case 'Y':
-      case 'y':
-        drawY(wordColor);
-        break;
-      case 'Z':
-      case 'z':
-        drawZ(wordColor);
-        break;
-      case '0':
-        draw0(wordColor);
-        break;
-      case '1':
-        draw1(wordColor);
-        break;
-      case '2':
-        draw2(wordColor);
-        break;
-      case '3':
-        draw3(wordColor);
-        break;
-      case '4':
-        draw4(wordColor);
-        break;
-      case '5':
-        draw5(wordColor);
-        break;
-      case '6':
-        draw6(wordColor);
-        break;
-      case '7':
-        draw7(wordColor);
-        break;
-      case '8':
-        draw8(wordColor);
-        break;
-      case '9':
-        draw9(wordColor);
-        break;
-      case ' ':
-        drawEmpty(e);
-        drawEmpty(e);
-        break;
-      case '!':
-        drawExclamation(wordColor);
-        break;
-      case '?':
-        drawQuestionMark(wordColor);
-        break;
-      case ':':
-        drawColon(wordColor);
-        break;
-      case ')':
-        drawRightParentheses(wordColor);
-        break;
-      case '(':
-        drawLeftParentheses(wordColor);
-        break;
+  for (int i = strlen(receivedWords) - 1; i >= 0; i--)
+  {
+    switch (receivedWords[i])
+    {
+    /* Each character is compared with the a character in switch case and the function to display that character in the POV display is called  */
+    case 'A':
+    case 'a':
+      drawA(wordColor);
+      break;
+    case 'B':
+    case 'b':
+      drawB(wordColor);
+      break;
+    case 'C':
+    case 'c':
+      drawC(wordColor);
+      break;
+    case 'D':
+    case 'd':
+      drawD(wordColor);
+      break;
+    case 'E':
+    case 'e':
+      drawE(wordColor);
+      break;
+    case 'F':
+    case 'f':
+      drawF(wordColor);
+      break;
+    case 'G':
+    case 'g':
+      drawG(wordColor);
+      break;
+    case 'H':
+    case 'h':
+      drawH(wordColor);
+      break;
+    case 'I':
+    case 'i':
+      drawI(wordColor);
+      break;
+    case 'J':
+    case 'j':
+      drawJ(wordColor);
+      break;
+    case 'K':
+    case 'k':
+      drawK(wordColor);
+      break;
+    case 'L':
+    case 'l':
+      drawL(wordColor);
+      break;
+    case 'M':
+    case 'm':
+      drawM(wordColor);
+      break;
+    case 'N':
+    case 'n':
+      drawN(wordColor);
+      break;
+    case 'O':
+    case 'o':
+      drawO(wordColor);
+      break;
+    case 'P':
+    case 'p':
+      drawP(wordColor);
+      break;
+    case 'Q':
+    case 'q':
+      drawQ(wordColor);
+      break;
+    case 'R':
+    case 'r':
+      drawR(wordColor);
+      break;
+    case 'S':
+    case 's':
+      drawS(wordColor);
+      break;
+    case 'T':
+    case 't':
+      drawT(wordColor);
+      break;
+    case 'U':
+    case 'u':
+      drawU(wordColor);
+      break;
+    case 'V':
+    case 'v':
+      drawV(wordColor);
+      break;
+    case 'W':
+    case 'w':
+      drawW(wordColor);
+      break;
+    case 'X':
+    case 'x':
+      drawX(wordColor);
+      break;
+    case 'Y':
+    case 'y':
+      drawY(wordColor);
+      break;
+    case 'Z':
+    case 'z':
+      drawZ(wordColor);
+      break;
+    case '0':
+      draw0(wordColor);
+      break;
+    case '1':
+      draw1(wordColor);
+      break;
+    case '2':
+      draw2(wordColor);
+      break;
+    case '3':
+      draw3(wordColor);
+      break;
+    case '4':
+      draw4(wordColor);
+      break;
+    case '5':
+      draw5(wordColor);
+      break;
+    case '6':
+      draw6(wordColor);
+      break;
+    case '7':
+      draw7(wordColor);
+      break;
+    case '8':
+      draw8(wordColor);
+      break;
+    case '9':
+      draw9(wordColor);
+      break;
+    case ' ':
+      drawEmpty(e);
+      drawEmpty(e);
+      break;
+    case '!':
+      drawExclamation(wordColor);
+      break;
+    case '?':
+      drawQuestionMark(wordColor);
+      break;
+    case ':':
+      drawColon(wordColor);
+      break;
+    case ')':
+      drawRightParentheses(wordColor);
+      break;
+    case '(':
+      drawLeftParentheses(wordColor);
+      break;
     }
   }
-
 }
 
 /* The below functions are used to control the Neopixel LEDs to display the different characters */
@@ -566,7 +590,7 @@ void drawC(uint32_t letterColor)
   NeoPixel.show();
   NeoPixel.show();
   NeoPixel.clear();
-  NeoPixel.fill(letterColor, 2 , 5);
+  NeoPixel.fill(letterColor, 2, 5);
   NeoPixel.show();
   NeoPixel.clear();
   NeoPixel.show();
@@ -1131,7 +1155,6 @@ void draw3(uint32_t letterColor)
   NeoPixel.show();
   NeoPixel.clear();
   NeoPixel.show();
-
 }
 void draw4(uint32_t letterColor)
 {
