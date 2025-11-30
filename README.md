@@ -22,9 +22,10 @@ This project demonstrates a Persistence of Vision (POV) display using Arduino an
 
 ### Installation
 1. **Clone the repository:**
-   \```sh
+   ```sh
    git clone https://github.com/gauravshetty90/POV-Display-Arduino-RPi-PicoW.git
    cd POV-Display-Arduino-RPi-PicoW
+   ``` 
 2. Install Arduino IDE and the board library:
     - Open Arduino IDE and go to File > Preferences.
     - In the Additional Board Manager URLs field, provide the link: https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
