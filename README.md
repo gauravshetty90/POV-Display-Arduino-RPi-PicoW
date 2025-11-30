@@ -101,7 +101,7 @@ Here is how the LEDs actually light up from right to left
 Every column is a segment as numbered below in the order of lighting up.
 	
 7    * * *       
-6    *     *
+6    *     *       
 5    * * *       
 4    *   *       
 3    *     *
