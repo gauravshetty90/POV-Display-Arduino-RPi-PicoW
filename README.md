@@ -49,69 +49,8 @@ This project demonstrates a Persistence of Vision (POV) display using Arduino an
     - Use the SSID and password to connect to the webserver through the URL: http://192.168.4.1.
   
 # Working of characters in the POV Display
-The LED lights up from right to left as the motor rotates it in the anti-clockwise direction:
-There are 8 LEDs numbered from '0' to '7' according to the Neopixel library.
-As per the code the LEDs have been programmed starting with the index '3'.
-Explanation of how 'R' is displayed according to the code.
-'R' is split into 4 segments
-'letterColor' is a paramter which specifies the colour that needs to be displayed as Neopixels support RGB.
-The colours are initialised in the beginning of the program. I have passed green colour for the display message.
-
-uint32_t g = NeoPixel.Color(0, 255, 0); //Grün
-
-writeChars(g,receivedWords);
-
-Setting the LEDs:
-//To Light up a single LED.
-NeoPixel.setPixelColor(LED index, Setting a colour for the LED);
-//To light up multiple LEDs which are adjacent to each other.
-NeoPixel.fill( Setting a colour for the LED, Index of the starting LED which needs to be lit, Number of LEDs that need to be lit from the starting index);
-
-	
-
-    
-   NeoPixel.setPixelColor(3, letterColor);
-    NeoPixel.setPixelColor(6, letterColor);
-    NeoPixel.show();
-    NeoPixel.clear();
-	The 3rd and the 6th index LEDs are set to light up.
-	
-NeoPixel.fill(letterColor, 4, 2);
-	NeoPixel.setPixelColor(7, letterColor);
-	NeoPixel.show();
-	NeoPixel.clear();
-	
-The 4th and the 5th LEDs are set to light up in the first line and 7th LED is set to light up in the 2nd line.
-	
-NeoPixel.setPixelColor(5, letterColor);
-	NeoPixel.setPixelColor(7, letterColor);
-	NeoPixel.show();
-	NeoPixel.clear();
-	
-The 5th and 7th LEDs are set to light up.
-	
-NeoPixel.fill(letterColor, 3, 5);
-	NeoPixel.show();
-	NeoPixel.clear();
-	NeoPixel.show();
-	
-The 3rd, 4th, 5th, 6th, 7th LEDs are set to light up.
-	
-Here is how the LEDs actually light up from right to left
-Every column is a segment as numbered below in the order of lighting up.
-	
-7    * * *       
-6    *     *       
-5    * * *       
-4    *   *       
-3    *     *
-2                          
-1                         
-0                          
-	  4 3 2 1
 <img width="712" height="1046" alt="image" src="https://github.com/user-attachments/assets/4c71f1df-e78d-4b41-a62e-ff478262c8af" />
 
-  
 # Contributing
 Contributions are welcome! Please fork this repository and submit pull requests.
 
@@ -126,4 +65,6 @@ Thanks to the open-source community for the libraries and tools used in this pro
 
 ![Text and color selection](https://github.com/user-attachments/assets/046c34c9-8f90-4566-833f-df70439f77c0)
 
+# Demo Gif
+![POV demo](assets/POV_Display_Demo.gif)
 
